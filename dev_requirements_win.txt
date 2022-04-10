@@ -1,0 +1,17 @@
+pylint
+pycodestyle
+flake8
+flake8-bugbear
+pep8-naming
+flake8-import-order
+flake8-docstrings
+flake8-comprehensions
+mypy
+coverage
+sphinx
+sphinx_rtd_theme
+pyinstaller
+# Note: On Windows we got an error trying to install 'pyqt5-tools'!
+# pyqt5-tools
+mock
+types-mock

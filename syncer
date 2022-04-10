@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2022 by Clemens Rabe <clemens.rabe@clemensrabe.de>
+# All rights reserved.
+# This file is part of syncer (https://github.com/seeraven/syncer)
+# and is released under the "BSD 3-Clause License". Please see the LICENSE file
+# that is included as part of this package.
+#
+"""Tray icon for sync status display of a single file."""
+
+
+# -----------------------------------------------------------------------------
+# Module Import
+# -----------------------------------------------------------------------------
+import sys
+
+from PyQt5.QtWidgets import QApplication
+
+from syncer_mods.application import Application
+
+
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
+if __name__ == "__main__":
+    qapp = QApplication(sys.argv)
+    app = Application(qapp)
+    qapp.exec_()
+
+
+# -----------------------------------------------------------------------------
+# EOF
+# -----------------------------------------------------------------------------

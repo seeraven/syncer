@@ -1,0 +1,16 @@
+pylint
+pycodestyle
+flake8
+flake8-bugbear
+pep8-naming
+flake8-import-order
+flake8-docstrings
+flake8-comprehensions
+mypy
+coverage
+sphinx
+sphinx_rtd_theme
+pyinstaller
+pyqt5-tools
+types-mock
+mock
