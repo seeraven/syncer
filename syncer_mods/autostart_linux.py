@@ -46,7 +46,7 @@ def create_linux_autostart() -> None:
 Version=1.0
 Name=Syncer
 Type=Application
-Exec={syncer_cmd}
+Exec=/bin/bash -c "sleep 10s && {syncer_cmd}"
 Terminal=false
 StartupNotify=true
 """)
