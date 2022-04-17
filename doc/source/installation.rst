@@ -13,7 +13,7 @@ syncer is distributed as a single executable packaged using PyInstaller_.
 So all you have to do is to download the latest executable and copy it to a
 location of your choice, for example :code:`/usr/local/bin`::
 
-    $ wget https://github.com/seeraven/syncer/releases/download/v1.0.0/syncer_v1.0.0_Ubuntu18.04_amd64
+    $ wget https://github.com/seeraven/syncer/releases/download/v1.0.1/syncer_v1.0.1_Ubuntu18.04_amd64
     $ sudo mv syncer_* /usr/local/bin/syncer
     $ sudo chmod +x /usr/local/bin/syncer
 

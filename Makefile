@@ -31,7 +31,7 @@ rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(
 #  SETTINGS
 # ----------------------------------------------------------------------------
 
-CURRENT_VERSION     := 1.0.0
+CURRENT_VERSION     := 1.0.1
 
 ifeq ($(ON_WINDOWS),1)
     PWD             := $(CURDIR)
