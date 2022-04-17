@@ -363,7 +363,7 @@ releases/syncer_v$(CURRENT_VERSION)_Ubuntu21.10_amd64:
 	ubuntu:21.10 \
 	/workdir/build_in_docker/ubuntu.sh releases/syncer_v$(CURRENT_VERSION)_Ubuntu21.10_amd64
 
-releases/syncer_v$(CURRENT_VERSION)_Ubuntu22.04_amd64:
+releases/syncer_v$(CURRENT_VERSION)_Ubuntu22.04_amd64: build-ui-files.venv
 	@mkdir -p releases
 	@docker run --rm \
 	-e TGTUID=$(shell id -u) -e TGTGID=$(shell id -g) \

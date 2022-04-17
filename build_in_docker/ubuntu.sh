@@ -31,7 +31,22 @@ ln -sf bash /bin/sh
 
 export QT_QPA_PLATFORM=minimal
 cd /workdir
-make clean
+if [ $(lsb_release -r -s) == "22.04" ]; then
+    if [ ! -e syncer_mods/settings_dialog_ui.py ]; then
+        echo "ERROR: pyqt5-tools are not available yet for python 3.10 used by Ubuntu 22.04!"
+        echo "       You need to call 'make build-ui-files.venv' first!"
+        exit 1
+    fi
+    mv syncer_mods/settings_dialog_ui.py /tmp/
+    cp dev_requirements.txt /tmp/
+    make clean
+    mv /tmp/settings_dialog_ui.py syncer_mods/
+    sed -i 's/pyqt5-tools/#pyqt5-tools/g' dev_requirements.txt
+    make venv
+    cp /tmp/dev_requirements.txt dev_requirements.txt
+else
+    make clean
+fi
 make unittests.venv
 make pyinstaller.venv
 
