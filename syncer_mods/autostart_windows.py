@@ -34,9 +34,15 @@ def create_windows_autostart() -> None:
     """Create a linux autostart entry for syncer."""
     if os.path.exists(AUTOSTART_FILENAME):
         return
+
+    if getattr(sys, 'frozen', False):
+        syncer_cmd = sys.executable    # For pyinstaller --onefile executables
+    else:
+        syncer_cmd = os.path.abspath(sys.argv[0])
+
     os.makedirs(os.path.dirname(AUTOSTART_FILENAME), exist_ok=True)
     with open(AUTOSTART_FILENAME, 'w', encoding='UTF-8') as file_handle:
-        file_handle.write(f'start "" "{os.path.abspath(sys.argv[0])}"\n')
+        file_handle.write(f'start "" "{syncer_cmd}"\n')
 
 
 def remove_windows_autostart() -> None:
