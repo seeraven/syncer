@@ -147,7 +147,7 @@ class Application(QObject):
         self.rotating_status_icon.wait()
         self.tray.setIcon(self.warning_icon)
         self.tray.setToolTip(message)
-        QMessageBox.critical(self.tray, "Syncer had an error", message)
+        QMessageBox.critical(None, "Syncer had an error", message)
         self.action_sync.setEnabled(True)
 
 
