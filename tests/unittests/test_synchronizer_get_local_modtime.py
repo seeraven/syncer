@@ -12,8 +12,8 @@
 # -----------------------------------------------------------------------------
 # Module Import
 # -----------------------------------------------------------------------------
-import os
 from datetime import datetime, timezone
+from tempfile import NamedTemporaryFile
 from unittest import TestCase
 
 from syncer_mods.synchronizer import SynchronizerError, get_local_modtime
@@ -27,9 +27,13 @@ class GetLocalModtimeTest(TestCase):
 
     def test_correct_modtime(self):
         """get_local_modtime: Correct output."""
-        filename = os.path.join(os.path.dirname(__file__), 'md5_testfile.txt')
-        expected_modtime = datetime(2022, 4, 16, 9, 36, 35, tzinfo=timezone.utc)
-        actual_modtime = get_local_modtime(filename)
+        with NamedTemporaryFile() as file_handle:
+            file_handle.write(b'some data')
+            file_handle.flush()
+
+            filename = file_handle.name
+            expected_modtime = datetime.now(tz=timezone.utc)
+            actual_modtime = get_local_modtime(filename)
         delta_secs = abs((expected_modtime - actual_modtime).total_seconds())
         self.assertTrue(delta_secs < 1)
 
