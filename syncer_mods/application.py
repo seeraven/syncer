@@ -21,6 +21,7 @@ import sys
 from PyQt5.QtCore import QObject, QThread, QTimer, pyqtSlot
 from PyQt5.QtWidgets import QAction, QDialog, QMenu, QMessageBox, QSystemTrayIcon
 
+from syncer_mods.about_dialog import AboutDialog
 from syncer_mods.autostart_linux import create_linux_autostart, remove_linux_autostart
 from syncer_mods.autostart_windows import create_windows_autostart, remove_windows_autostart
 from syncer_mods.icons import get_default_icon, get_warning_icon
@@ -62,6 +63,10 @@ class Application(QObject):
         self.action_settings.triggered.connect(self.show_settings)
         self.menu.addAction(self.action_settings)
 
+        self.action_about = QAction("About")
+        self.action_about.triggered.connect(self.show_about)
+        self.menu.addAction(self.action_about)
+
         self.action_quit = QAction("Quit")
         self.action_quit.triggered.connect(qapp.quit)
         self.menu.addAction(self.action_quit)
@@ -97,7 +102,7 @@ class Application(QObject):
     def show_settings(self) -> None:
         """Show the settings dialog."""
         dialog = SettingsDialog(self.settings)
-        if dialog.exec_() == QDialog.Accepted:
+        if dialog.exec_() == QDialog.Accepted:  # type: ignore
             if sys.platform == 'linux':
                 if self.settings.get_value("autostart"):
                     create_linux_autostart()
@@ -108,6 +113,12 @@ class Application(QObject):
                     create_windows_autostart()
                 else:
                     remove_windows_autostart()
+
+    @pyqtSlot()
+    def show_about(self) -> None:
+        """Show the about dialog."""
+        dialog = AboutDialog()
+        dialog.exec_()
 
     @pyqtSlot()
     def synchronize(self) -> None:
@@ -147,7 +158,7 @@ class Application(QObject):
         self.rotating_status_icon.wait()
         self.tray.setIcon(self.warning_icon)
         self.tray.setToolTip(message)
-        QMessageBox.critical(None, "Syncer had an error", message)
+        QMessageBox.critical(None, "Syncer had an error", message)  # type: ignore
         self.action_sync.setEnabled(True)
 
 

@@ -137,3 +137,4 @@ doc/functional-tests-coverage/
 doc/source/apidoc/
 doc/unittests-coverage/
 releases/
+syncer_mods/*_dialog_ui.py
