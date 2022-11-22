@@ -1,4 +1,4 @@
 [pycodestyle]
 #ignore = E265,E201,E251,E202,E221,E271,E272,E722,E241,W504
 max-line-length = 100
-exclude=settings_dialog_ui.py
+exclude=settings_dialog_ui.py,about_dialog_ui.py

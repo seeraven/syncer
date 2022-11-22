@@ -31,6 +31,7 @@ rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(
 #  SETTINGS
 # ----------------------------------------------------------------------------
 
+# Note: Ensure version is adjusted in ui/about_dialog.ui!
 CURRENT_VERSION     := 1.0.2
 
 UBUNTU_DIST_VERSIONS   := 18.04 20.04 22.04
@@ -54,6 +55,7 @@ SOURCES             := $(SCRIPTS_ABS) $(MODULES_ABS)
 UI_DIR              := ui
 UNITTEST_DIR        := tests/unittests
 
+# Note: Generated python files must be excluded from style checks in .pylintrc, .pycodestyle and setup.cfg
 UI_FILES              := $(call rwildcard,$(UI_DIR),*.ui)
 UI_PY_FILES           := $(patsubst ui/%.ui,syncer_mods/%_ui.py,$(UI_FILES))
 UNITTEST_FILES        := $(call rwildcard,$(UNITTEST_DIR),*.py)

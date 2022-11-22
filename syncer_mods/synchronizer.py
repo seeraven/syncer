@@ -21,8 +21,9 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 from datetime import datetime, timezone
-from typing import Optional
+from typing import List, Optional
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
@@ -60,6 +61,44 @@ def md5_of_file(filename: str) -> Optional[str]:
     return file_hash.hexdigest()
 
 
+def check_output(args: List[str]) -> str:
+    """Wrap subprocess.check_output to support console hiding on Windows.
+
+    Args:
+        args: List of arguments to execute.
+
+    Returns:
+        Returns the stdout of the command.
+    """
+    # We need to use this construct as it is the only way mypy understands platform specific code!
+    # pylint: disable=consider-using-in
+    if sys.platform == "win32" or sys.platform == "cygwin":
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        return subprocess.check_output(args, shell=False, encoding="utf-8",
+                                       startupinfo=startupinfo)
+    return subprocess.check_output(args, shell=False, encoding="utf-8")
+
+
+def check_call(args: List[str]) -> None:
+    """Wrap subprocess.check_call to support console hiding on Windows.
+
+    Args:
+        args: List of arguments to execute.
+    """
+    # We need to use this construct as it is the only way mypy understands platform specific code!
+    # pylint: disable=consider-using-in
+    if sys.platform == "win32" or sys.platform == "cygwin":
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        subprocess.check_call(args, shell=False,
+                              startupinfo=startupinfo)
+        return
+    subprocess.check_call(args, shell=False)
+
+
 def get_remote_md5sum(rclone: str, remote_file: str) -> str:
     """Call `rclone md5sum <remote_file>` to retrieve the md5 checksum of the remote file.
 
@@ -74,8 +113,7 @@ def get_remote_md5sum(rclone: str, remote_file: str) -> str:
         SynchronizerError: If an error occurs.
     """
     try:
-        remote_md5 = subprocess.check_output([rclone, "md5sum", remote_file],
-                                             shell=False, encoding='utf-8')[:32]
+        remote_md5 = check_output([rclone, "md5sum", remote_file])[:32]
     except subprocess.CalledProcessError as call_error:
         if call_error.returncode == 1:
             raise SynchronizerError(
@@ -107,8 +145,7 @@ def get_remote_modtime(rclone: str, remote_file: str) -> datetime:
         SynchronizerError: If an error occurs.
     """
     try:
-        remote_json = subprocess.check_output([rclone, "lsjson", remote_file],
-                                              shell=False, encoding='utf-8')
+        remote_json = check_output([rclone, "lsjson", remote_file])
     except subprocess.CalledProcessError:
         raise SynchronizerError(
             f"Can't determine modification time of remote file {remote_file}!") from None
@@ -205,7 +242,7 @@ class Synchronizer(QObject):
                     shutil.copyfile(local_file, local_file + ".bak")
                     local_dir = os.path.dirname(local_file)
                     cmd = [rclone, "sync", remote_file, local_dir]
-                subprocess.check_call(cmd, shell=False)
+                check_call(cmd)
 
         except SynchronizerError as synchronizer_error:
             self.error.emit(str(synchronizer_error))
