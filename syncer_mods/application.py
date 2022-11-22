@@ -97,7 +97,7 @@ class Application(QObject):
     def show_settings(self) -> None:
         """Show the settings dialog."""
         dialog = SettingsDialog(self.settings)
-        if dialog.exec_() == QDialog.Accepted:
+        if dialog.exec_() == QDialog.Accepted:  # type: ignore
             if sys.platform == 'linux':
                 if self.settings.get_value("autostart"):
                     create_linux_autostart()
@@ -147,7 +147,7 @@ class Application(QObject):
         self.rotating_status_icon.wait()
         self.tray.setIcon(self.warning_icon)
         self.tray.setToolTip(message)
-        QMessageBox.critical(None, "Syncer had an error", message)
+        QMessageBox.critical(None, "Syncer had an error", message)  # type: ignore
         self.action_sync.setEnabled(True)
 
 

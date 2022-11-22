@@ -160,7 +160,7 @@ class Synchronizer(QObject):
     finished = pyqtSignal(str)
     error = pyqtSignal(str)
 
-    def __init__(self, settings: Settings = None):
+    def __init__(self, settings: Optional[Settings] = None):
         """Construct a new worker.
 
         Args:
