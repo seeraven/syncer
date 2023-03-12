@@ -40,7 +40,7 @@ class Settings:
         """Get the remote file by combining remote_dir with local filename."""
         filename = os.path.basename(self.get_value("local_file"))
         remote_dir = self.get_value("remote_dir")
-        if remote_dir.endswith(':') or remote_dir.endswith('/'):
+        if remote_dir.endswith(":") or remote_dir.endswith("/"):
             remote_file = f"{remote_dir}{filename}"
         else:
             remote_file = f"{remote_dir}/{filename}"

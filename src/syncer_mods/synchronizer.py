@@ -76,8 +76,7 @@ def check_output(args: List[str]) -> str:
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         startupinfo.wShowWindow = subprocess.SW_HIDE
-        return subprocess.check_output(args, shell=False, encoding="utf-8",
-                                       startupinfo=startupinfo)
+        return subprocess.check_output(args, shell=False, encoding="utf-8", startupinfo=startupinfo)
     return subprocess.check_output(args, shell=False, encoding="utf-8")
 
 
@@ -93,8 +92,7 @@ def check_call(args: List[str]) -> None:
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         startupinfo.wShowWindow = subprocess.SW_HIDE
-        subprocess.check_call(args, shell=False,
-                              startupinfo=startupinfo)
+        subprocess.check_call(args, shell=False, startupinfo=startupinfo)
         return
     subprocess.check_call(args, shell=False)
 
@@ -116,18 +114,17 @@ def get_remote_md5sum(rclone: str, remote_file: str) -> str:
         remote_md5 = check_output([rclone, "md5sum", remote_file])[:32]
     except subprocess.CalledProcessError as call_error:
         if call_error.returncode == 1:
-            raise SynchronizerError(
-                f"Syntax error of remote file {remote_file}, please check your settings!") from None
+            raise SynchronizerError(f"Syntax error of remote file {remote_file}, please check your settings!") from None
         if call_error.returncode in [3, 4]:
-            raise SynchronizerError(
-                f"Remote file {remote_file} does not exist! Please check your settings!") from None
+            raise SynchronizerError(f"Remote file {remote_file} does not exist! Please check your settings!") from None
         raise SynchronizerError(
             f"RClone returned exit code {call_error.returncode}! Please check "
-            "https://rclone.org/docs/#exit-code for a description of the exit codes.") from None
+            "https://rclone.org/docs/#exit-code for a description of the exit codes."
+        ) from None
     except FileNotFoundError:
         raise SynchronizerError(
-            f"Specified rclone binary {rclone} does not exist! Please check your settings!") \
-            from None
+            f"Specified rclone binary {rclone} does not exist! Please check your settings!"
+        ) from None
     return remote_md5
 
 
@@ -147,21 +144,20 @@ def get_remote_modtime(rclone: str, remote_file: str) -> datetime:
     try:
         remote_json = check_output([rclone, "lsjson", remote_file])
     except subprocess.CalledProcessError:
-        raise SynchronizerError(
-            f"Can't determine modification time of remote file {remote_file}!") from None
+        raise SynchronizerError(f"Can't determine modification time of remote file {remote_file}!") from None
     except FileNotFoundError:
         raise SynchronizerError(
-            f"Specified rclone binary {rclone} does not exist! Please check your settings!") \
-            from None
+            f"Specified rclone binary {rclone} does not exist! Please check your settings!"
+        ) from None
 
     try:
-        remote_modtime = datetime.strptime(json.loads(remote_json)[0]["ModTime"],
-                                           "%Y-%m-%dT%H:%M:%S.%fZ").replace(
-                                               tzinfo=timezone.utc)
+        remote_modtime = datetime.strptime(json.loads(remote_json)[0]["ModTime"], "%Y-%m-%dT%H:%M:%S.%fZ").replace(
+            tzinfo=timezone.utc
+        )
     except Exception as general_exception:
         raise SynchronizerError(
-            (f"Error extracting modification time of remote file {remote_file}: "
-             f"{general_exception}")) from None
+            (f"Error extracting modification time of remote file {remote_file}: " f"{general_exception}")
+        ) from None
     return remote_modtime
 
 
@@ -178,12 +174,11 @@ def get_local_modtime(local_file: str) -> datetime:
         SynchronizerError: If an error occurs.
     """
     try:
-        local_modtime = datetime.fromtimestamp(os.stat(local_file).st_mtime,
-                                               tz=timezone.utc)
+        local_modtime = datetime.fromtimestamp(os.stat(local_file).st_mtime, tz=timezone.utc)
     except Exception as general_exception:
         raise SynchronizerError(
-            (f"Error extracting modification time of local file {local_file}: "
-             f"{general_exception}")) from None
+            (f"Error extracting modification time of local file {local_file}: " f"{general_exception}")
+        ) from None
     return local_modtime
 
 
@@ -229,8 +224,9 @@ class Synchronizer(QObject):
                     local_modtime = get_local_modtime(local_file)
                     delta_secs = abs((local_modtime - remote_modtime).total_seconds())
                     if delta_secs < 30.0:
-                        raise SynchronizerError(f"Time difference of {delta_secs} seconds is too "
-                                                "small to ensure picking the right file!")
+                        raise SynchronizerError(
+                            f"Time difference of {delta_secs} seconds is too " "small to ensure picking the right file!"
+                        )
                     if local_modtime > remote_modtime:
                         sync_src = "local"
                     else:

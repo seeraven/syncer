@@ -28,7 +28,7 @@ class GetLocalModtimeTest(TestCase):
     def test_correct_modtime(self):
         """get_local_modtime: Correct output."""
         with NamedTemporaryFile() as file_handle:
-            file_handle.write(b'some data')
+            file_handle.write(b"some data")
             file_handle.flush()
 
             filename = file_handle.name
@@ -39,9 +39,9 @@ class GetLocalModtimeTest(TestCase):
 
     def test_error(self):
         """get_local_modtime: Error getting modtime."""
-        self.assertRaisesRegex(SynchronizerError,
-                               "Error extracting modification time of local file",
-                               get_local_modtime, "does_not_exist")
+        self.assertRaisesRegex(
+            SynchronizerError, "Error extracting modification time of local file", get_local_modtime, "does_not_exist"
+        )
 
 
 # -----------------------------------------------------------------------------

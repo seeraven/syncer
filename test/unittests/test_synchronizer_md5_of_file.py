@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2022 by Clemens Rabe <clemens.rabe@clemensrabe.de>
@@ -7,26 +6,32 @@
 # and is released under the "BSD 3-Clause License". Please see the LICENSE file
 # that is included as part of this package.
 #
-"""Tray icon for sync status display of a single file."""
+"""Unit tests of the syncer_mods.synchronizer module."""
 
 
 # -----------------------------------------------------------------------------
 # Module Import
 # -----------------------------------------------------------------------------
-import sys
+import os
+from unittest import TestCase
 
-from PyQt5.QtWidgets import QApplication
-
-from syncer_mods.application import Application
+from syncer_mods.synchronizer import md5_of_file
 
 
 # -----------------------------------------------------------------------------
-# Main
+# Test Class
 # -----------------------------------------------------------------------------
-if __name__ == "__main__":
-    qapp = QApplication(sys.argv)
-    app = Application(qapp)
-    qapp.exec_()
+class Md5OfFileTest(TestCase):
+    """Test the :func:`syncer_mods.synchronizer.md5_of_file` function."""
+
+    def test_file_does_not_exist(self):
+        """md5_of_file: Non-existant file."""
+        self.assertEqual(md5_of_file("/i/do/not/exist"), None)
+
+    def test_correct_md5(self):
+        """md5_of_file: Correct checksum."""
+        filename = os.path.join(os.path.dirname(__file__), "md5_testfile.txt")
+        self.assertEqual(md5_of_file(filename), "45e898b716af4c7f2adca7ac3519b663")
 
 
 # -----------------------------------------------------------------------------

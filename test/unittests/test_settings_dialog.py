@@ -30,11 +30,13 @@ class SettingsMock:
 
     def __init__(self):
         """Construct a new instance."""
-        self.settings = {"rclone": "rclone_bin",
-                         "local_file": "local_file_path",
-                         "remote_dir": "remote_dir",
-                         "autostart": False,
-                         "sync_on_start": True}
+        self.settings = {
+            "rclone": "rclone_bin",
+            "local_file": "local_file_path",
+            "remote_dir": "remote_dir",
+            "autostart": False,
+            "sync_on_start": True,
+        }
 
     def get_value(self, key):
         """Get a value."""

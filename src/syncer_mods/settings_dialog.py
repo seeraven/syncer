@@ -55,24 +55,22 @@ class SettingsDialog(QDialog):
 
     # pylint: disable=invalid-name
     @pyqtSlot()
-    def on_browseRclone_clicked(self) -> None:   # noqa
+    def on_browseRclone_clicked(self) -> None:  # noqa
         """Handle a click on the Browse button next to the RClone setting."""
         start_dir = os.path.dirname(self.gui.rclonePath.text())
-        filename, _ = QFileDialog.getOpenFileName(self,
-                                                  self.tr("Select the rclone binary"),
-                                                  start_dir,
-                                                  self.tr("All files (*.*)"))
+        filename, _ = QFileDialog.getOpenFileName(
+            self, self.tr("Select the rclone binary"), start_dir, self.tr("All files (*.*)")
+        )
         if filename:
             self.gui.rclonePath.setText(filename)
 
     @pyqtSlot()
-    def on_browseLocalFilename_clicked(self) -> None:   # noqa
+    def on_browseLocalFilename_clicked(self) -> None:  # noqa
         """Handle a click on the Browse button next to the Local Filename setting."""
         start_dir = os.path.dirname(self.gui.localFilename.text())
-        filename, _ = QFileDialog.getOpenFileName(self,
-                                                  self.tr("Select the local file"),
-                                                  start_dir,
-                                                  self.tr("All files (*.*)"))
+        filename, _ = QFileDialog.getOpenFileName(
+            self, self.tr("Select the local file"), start_dir, self.tr("All files (*.*)")
+        )
         if filename:
             self.gui.localFilename.setText(filename)
 

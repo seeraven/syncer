@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Module for syncer to access icons.
+Module for syncer to create autostart entry.
 
 Copyright:
     2022 by Clemens Rabe <clemens.rabe@clemensrabe.de>
@@ -17,37 +17,36 @@ Copyright:
 # Module Import
 # -----------------------------------------------------------------------------
 import os
-from typing import List
+import sys
 
-from PyQt5.QtGui import QIcon
+# -----------------------------------------------------------------------------
+# Settings
+# -----------------------------------------------------------------------------
+AUTOSTART_FILENAME = os.path.expanduser(r"~\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Syncer.bat")
 
 
 # -----------------------------------------------------------------------------
-# Icons directory (../icons)
+# Helper functions
 # -----------------------------------------------------------------------------
-ICONS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'icons')
+def create_windows_autostart() -> None:
+    """Create a linux autostart entry for syncer."""
+    if os.path.exists(AUTOSTART_FILENAME):
+        return
+
+    if getattr(sys, "frozen", False):
+        syncer_cmd = sys.executable  # For pyinstaller --onefile executables
+    else:
+        syncer_cmd = os.path.abspath(sys.argv[0])
+
+    os.makedirs(os.path.dirname(AUTOSTART_FILENAME), exist_ok=True)
+    with open(AUTOSTART_FILENAME, "w", encoding="UTF-8") as file_handle:
+        file_handle.write(f'start "" "{syncer_cmd}"\n')
 
 
-# -----------------------------------------------------------------------------
-# Icon Getters
-# -----------------------------------------------------------------------------
-def get_default_icon() -> QIcon:
-    """Get the default icon."""
-    return QIcon(os.path.join(ICONS_DIR, 'syncer-running-000.ico'))
-
-
-def get_warning_icon() -> QIcon:
-    """Get the warning icon."""
-    return QIcon(os.path.join(ICONS_DIR, 'syncer-warning-icon.ico'))
-
-
-def get_rotating_status_icons() -> List[QIcon]:
-    """Get a list of icons represending a rotating arrow."""
-    rotating_status_icons = []
-    for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
-        filename = os.path.join(ICONS_DIR, f"syncer-running-{angle:03d}.ico")
-        rotating_status_icons.append(QIcon(filename))
-    return rotating_status_icons
+def remove_windows_autostart() -> None:
+    """Remove a windows autostart entry for syncer."""
+    if os.path.exists(AUTOSTART_FILENAME):
+        os.unlink(AUTOSTART_FILENAME)
 
 
 # -----------------------------------------------------------------------------

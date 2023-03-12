@@ -30,44 +30,50 @@ class GetRemoteMd5sumTest(TestCase):
 
     def test_rclone_binary_does_not_exist(self):
         """get_remote_md5sum: Non-existant rclone."""
-        self.assertRaisesRegex(SynchronizerError,
-                               "Specified rclone binary .* does not exist!",
-                               get_remote_md5sum, "does_not_exist", "remote:file")
+        self.assertRaisesRegex(
+            SynchronizerError,
+            "Specified rclone binary .* does not exist!",
+            get_remote_md5sum,
+            "does_not_exist",
+            "remote:file",
+        )
 
     def test_remote_file_invalid(self):
         """get_remote_md5sum: Invalid remote directory."""
-        self.assertRaisesRegex(SynchronizerError,
-                               "Syntax error of remote file .*",
-                               get_remote_md5sum, shutil.which("rclone"),
-                               "non_existant_remote:file")
+        self.assertRaisesRegex(
+            SynchronizerError,
+            "Syntax error of remote file .*",
+            get_remote_md5sum,
+            shutil.which("rclone"),
+            "non_existant_remote:file",
+        )
 
-    @mock.patch('subprocess.check_output')
+    @mock.patch("subprocess.check_output")
     def test_correct_output(self, mock_subproc_check_output):
         """get_remote_md5sum: Correct output."""
         mock_subproc_check_output.return_value = "1" * 32
-        self.assertEqual(get_remote_md5sum("rclone", "remote:file"),
-                         "1" * 32)
+        self.assertEqual(get_remote_md5sum("rclone", "remote:file"), "1" * 32)
 
-    @mock.patch('subprocess.check_output')
+    @mock.patch("subprocess.check_output")
     def test_remote_file_does_not_exist(self, mock_subproc_check_output):
         """get_remote_md5sum: Remote file does not exist."""
         mock_subproc_check_output.side_effect = subprocess.CalledProcessError(3, "rclone")
-        self.assertRaisesRegex(SynchronizerError,
-                               "Remote file .* does not exist!",
-                               get_remote_md5sum, "rclone", "something")
+        self.assertRaisesRegex(
+            SynchronizerError, "Remote file .* does not exist!", get_remote_md5sum, "rclone", "something"
+        )
 
         mock_subproc_check_output.side_effect = subprocess.CalledProcessError(4, "rclone")
-        self.assertRaisesRegex(SynchronizerError,
-                               "Remote file .* does not exist!",
-                               get_remote_md5sum, "rclone", "something")
+        self.assertRaisesRegex(
+            SynchronizerError, "Remote file .* does not exist!", get_remote_md5sum, "rclone", "something"
+        )
 
-    @mock.patch('subprocess.check_output')
+    @mock.patch("subprocess.check_output")
     def test_other_rclone_error(self, mock_subproc_check_output):
         """get_remote_md5sum: Other rclone error."""
         mock_subproc_check_output.side_effect = subprocess.CalledProcessError(5, "rclone")
-        self.assertRaisesRegex(SynchronizerError,
-                               "RClone returned exit code 5!",
-                               get_remote_md5sum, "rclone", "something")
+        self.assertRaisesRegex(
+            SynchronizerError, "RClone returned exit code 5!", get_remote_md5sum, "rclone", "something"
+        )
 
 
 # -----------------------------------------------------------------------------

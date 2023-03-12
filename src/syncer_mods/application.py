@@ -103,12 +103,12 @@ class Application(QObject):
         """Show the settings dialog."""
         dialog = SettingsDialog(self.settings)
         if dialog.exec_() == QDialog.Accepted:  # type: ignore
-            if sys.platform == 'linux':
+            if sys.platform == "linux":
                 if self.settings.get_value("autostart"):
                     create_linux_autostart()
                 else:
                     remove_linux_autostart()
-            elif sys.platform == 'win32':
+            elif sys.platform == "win32":
                 if self.settings.get_value("autostart"):
                     create_windows_autostart()
                 else:

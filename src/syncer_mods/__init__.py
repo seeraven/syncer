@@ -18,7 +18,8 @@ Copyright:
 # -----------------------------------------------------------------------------
 try:
     from ctypes import windll  # type: ignore
-    MY_APP_ID = 'com.clemensrabe.syncer.v1'
+
+    MY_APP_ID = "com.clemensrabe.syncer.v1"
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(MY_APP_ID)
 except ImportError:
     pass

@@ -130,11 +130,10 @@ dmypy.json
 *~
 *.bak
 
-.coverage-*
+.dockerstamps/
 .vagrant/
-doc/combined-coverage/
-doc/functional-tests-coverage/
+src/syncer_mods/*_dialog_ui.py
+.coverage*
 doc/source/apidoc/
 doc/unittests-coverage/
 releases/
-syncer_mods/*_dialog_ui.py
